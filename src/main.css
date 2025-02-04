@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .formLabel::before {
+    @apply absolute h-full transition-all top-0 w-0 left-0 rounded-md bg-rose-600;
+    content: "";
+    transition-duration: 0.6s;
+  }
+
+  .formLabel:hover::before {
+    @apply w-full;
+  }
+
+  .formLabel * {
+    z-index: 10;
+  }
+
+  .formSubmit {
+    @apply outline-none gap-2 items-center bg-transparent border border-white rounded-md cursor-pointer inline-flex flex-shrink-0 text-base leading-6 overflow-hidden px-4 py-3 text-ellipsis transition-all whitespace-nowrap justify-center;
+  }
+
+  .formSubmit:hover {
+    @apply shadow-[4px_4px_0px] -translate-x-1 -translate-y-1;
+  }
+
+  .formSubmit:focus-visible {
+    @apply outline-offset-1;
+  }
+}
+
