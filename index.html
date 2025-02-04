@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/styles.css" />
+    <link rel="stylesheet" href="./src/loading.css" />
+    <title>Spots - Home</title>
+  </head>
+  <body class="h-[100dvh] text-white overflow-y-auto">
+    <div class="h-full" id="root"></div>
+    <script>
+      // HMR WebSocket client
+      const ws = new WebSocket("ws://localhost:8081");
+      ws.onmessage = (event) => {
+        if (event.data === "reload") {
+          location.reload();
+        }
+      };
+    </script>
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>
