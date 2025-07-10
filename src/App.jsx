@@ -8,3 +8,4 @@ export default function App() {
 
   return !responseData ? <Home /> : <DisplayQueryResults />;
 }
+

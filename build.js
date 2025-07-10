@@ -2,6 +2,8 @@ const esbuild = require('esbuild');
 const chokidar = require('chokidar');
 const WebSocket = require('ws');
 
+require('dotenv').config()
+
 // Start a WebSocket server for HMR
 const clients = [];
 const wss = new WebSocket.Server({ port: 8081 });
@@ -30,6 +32,9 @@ const build = () =>
     target: ['es6'],
     logLevel: 'info',
     publicPath: '/',
+    define: {
+      'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL),
+    },
   });
 
 // Watch for changes
@@ -41,3 +46,4 @@ chokidar.watch('src').on('change', async () => {
 
 // Run initial build
 build();
+
