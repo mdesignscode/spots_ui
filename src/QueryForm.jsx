@@ -20,7 +20,7 @@ const QueryForm = ({ username, error, fetchingUsername }) => {
         const validateInput = (input) => {
                 const regex =
                         selectedAction === "search"
-                                ? /^[a-zA-Z0-9\s]+ - [a-zA-Z0-9\s]+$/
+                                ? /^(.*) - (.*)$/
                                 : /^https:\/\/(www\.)?(open\.spotify\.com\/(playlist|artist|track)\/\w+(\?si=\w+)?|(youtube\.com\/(watch\?v=[\w-]+|playlist\?list=[\w-]+(&si=\w+)?)|youtu\.be\/[\w-]+(\?.*)?))$/;
                 return regex.test(input);
         };
