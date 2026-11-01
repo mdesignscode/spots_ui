@@ -1,49 +1,38 @@
-const esbuild = require('esbuild');
-const chokidar = require('chokidar');
-const WebSocket = require('ws');
+// Builds src/ into dist/. `node build.js --watch` rebuilds on change and reloads the page.
+const esbuild = require("esbuild");
 
-require('dotenv').config()
+require("dotenv").config();
 
-// Start a WebSocket server for HMR
-const clients = [];
-const wss = new WebSocket.Server({ port: 8081 });
-wss.on('connection', (ws) => {
-  clients.push(ws);
-  ws.on('close', () => clients.splice(clients.indexOf(ws), 1));
-});
+const watch = process.argv.includes("--watch");
 
-// Notify clients of updates
-const notifyClients = () => {
-  clients.forEach((ws) => {
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send('reload');
-    }
-  });
-};
-
-// Build with esbuild
 const build = () =>
   esbuild.build({
-    entryPoints: ['src/index.jsx'],
+    entryPoints: ["src/index.jsx"],
     bundle: true,
-    outfile: 'dist/bundle.js',
-    loader: { '.js': 'jsx', '.svg': 'file' },
+    outdir: "dist",
+    entryNames: "bundle",
+    jsx: "automatic",
     sourcemap: true,
-    target: ['es6'],
-    logLevel: 'info',
-    publicPath: '/',
+    minify: !watch,
+    target: ["es6"], // older 32-bit browsers
+    logLevel: "info",
     define: {
-      'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL),
+      "process.env.REACT_APP_API_URL": JSON.stringify(process.env.REACT_APP_API_URL || ""),
+      "process.env.NODE_ENV": JSON.stringify(watch ? "development" : "production"),
     },
   });
 
-// Watch for changes
-chokidar.watch('src').on('change', async () => {
-  console.log('File changed, rebuilding...');
-  await build();
-  notifyClients();
-});
+build().catch(() => process.exit(1));
 
-// Run initial build
-build();
+if (watch) {
+  const chokidar = require("chokidar");
+  const WebSocket = require("ws");
 
+  // the page connects here and reloads when a rebuild finishes
+  const wss = new WebSocket.Server({ port: 8081 });
+  chokidar.watch("src").on("change", async () => {
+    console.log("File changed, rebuilding...");
+    await build().catch(() => {});
+    wss.clients.forEach((ws) => ws.readyState === WebSocket.OPEN && ws.send("reload"));
+  });
+}

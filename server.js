@@ -1,26 +1,36 @@
-const { createServer } = require('http');
-const { readFileSync, existsSync } = require('fs');
-const path = require('path');
+const { createServer } = require("http");
+const { readFile } = require("fs");
+const path = require("path");
+
+const ROOT = __dirname;
+const PORT = process.env.PORT || 3000;
+
+// only the page and the built bundle are served
+const PUBLIC = [path.join(ROOT, "index.html"), path.join(ROOT, "dist") + path.sep];
 
 const MIME_TYPES = {
-  '.html': 'text/html',
-  '.js': 'application/javascript',
-  '.css': 'text/css',
-  '.svg': 'image/svg+xml',
-  '.json': 'application/json',
+  ".html": "text/html; charset=utf-8",
+  ".js": "application/javascript",
+  ".css": "text/css",
+  ".map": "application/json",
+  ".svg": "image/svg+xml",
 };
 
 createServer((req, res) => {
-  const filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
-  const ext = path.extname(filePath);
-  const mime = MIME_TYPES[ext] || 'text/plain';
+  const urlPath = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+  const filePath = path.join(ROOT, urlPath === "/" ? "index.html" : urlPath);
 
-  if (existsSync(filePath)) {
-    res.writeHead(200, { 'Content-Type': mime });
-    res.end(readFileSync(filePath));
-  } else {
+  if (!PUBLIC.some((allowed) => filePath === allowed || filePath.startsWith(allowed))) {
     res.writeHead(404);
-    res.end('404: File not found');
+    return res.end("404: File not found");
   }
-}).listen(3000, () => console.log('Server running at http://localhost:3000'));
 
+  readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      return res.end("404: File not found");
+    }
+    res.writeHead(200, { "Content-Type": MIME_TYPES[path.extname(filePath)] || "application/octet-stream" });
+    res.end(data);
+  });
+}).listen(PORT, () => console.log(`Spots UI running at http://localhost:${PORT}`));

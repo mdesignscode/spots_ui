@@ -1,56 +1,42 @@
-# Spots GUI
+# Spots UI
 
-This is a UI for interacting with the [Spots API](https://github.com/mdesignscode/spots_flask), written in React, and built using esbuilt (for 32bit support).
+A web UI for the [Spots API](https://github.com/mdesignscode/spots_flask). Paste a Spotify or YouTube link, or search YouTube, then:
 
-<br/>
+* download songs as tagged mp3s, one at a time or a whole playlist, album or artist's tracks
+* download any YouTube video as mp4 at the resolution you pick, with its size shown before you download
 
-<h2 style="text-align: center; color: #4CAF50;">Tech Stack</h2>
+The API saves the files to your Downloads folder.
 
-[React.js](https://react.dev)
+Built with React and bundled with esbuild (targets ES6, for older 32-bit browsers).
 
-<h2 style="text-align: center; color: #4CAF50;">Requirements</h2>
+## Requirements
 
-<strong><a href="https://nodejs.org/en/download/">Node.js</a></strong>
+* [Node.js](https://nodejs.org/en/download/)
+* The Spots API running locally (see its README)
 
-<h2 style="text-align: center; color: #4CAF50;">Setup</h2>
-
-<h4>Clone this repo:</h4>
-
-```bash
-  git clone https://github.com/mdesignscode/spots_ui
-```
-
-<h4>Go to repo folder:</h4>
+## Setup
 
 ```bash
-  cd spots_ui
-```
-
-<h4>Install dependencies</h4>
-
-```npm
+git clone https://github.com/mdesignscode/spots_ui
+cd spots_ui
 npm install
 ```
 
-<h4>Add keys to environment:</h4>
+Create a `.env` file with the API's address:
 
-<p style="margin-left: 1rem;">Create a file called <strong>.env</strong> at the root of the project and add the following:</p>
-
-    REACT_APP_API_URL=http://localhost:5000/ # ensure server is running before starting up the UI
-
-<h4>Build project</h4>
-
-```bash
-node build.js
+```
+REACT_APP_API_URL=http://localhost:5000/
 ```
 
-<h4>Start Server</h4>
+## Run
 
 ```bash
-node server.js
+npm run build   # build into dist/
+npm start       # serve on http://localhost:3000
 ```
 
-<h2 style="text-align: center; color: #4CAF50;">License</h2>
+While working on the UI, `npm run dev` rebuilds on every change and reloads the page.
+
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
