@@ -21,7 +21,8 @@ const QueryForm = ({ username, error, fetchingUsername }) => {
                 const regex =
                         selectedAction === "search"
                                 ? /^(.*) - (.*)$/
-                                : /^https:\/\/(www\.)?(open\.spotify\.com\/(playlist|artist|track)\/\w+(\?si=\w+)?|(youtube\.com\/(watch\?v=[\w-]+|playlist\?list=[\w-]+(&si=\w+)?)|youtu\.be\/[\w-]+(\?.*)?))$/;
+                                : /^https:(www\.)?\/\/((open\.spotify)|((music\.)?youtube|youtu\.be))\.com\/(artist|playlist|album|track|watch)((\/[A-Za-z_0-9_-]+)|(\?(list|v)=[A-Za-z0-9_-]+))[&?]?(si=[A-Za-z0-9_-]+)?$/
+
                 return regex.test(input);
         };
 

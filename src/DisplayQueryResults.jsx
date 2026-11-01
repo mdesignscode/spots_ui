@@ -10,13 +10,13 @@ import RenderPlaylists from "./RenderPlaylists";
 export default function DisplayQueryResults() {
   // grap data from context
   const { responseData, setResponseData } = useContext(DataContext);
+  console.log({ responseData })
 
   const scrollDownRef = useRef();
 
   // check if resource is single only
   const isSingleOnly =
-    responseData.resource === "single" &&
-    !responseData.recommended_tracks.length;
+    responseData.resource === "single";
 
   const handleRefresh = () => {
     setResponseData(null);
@@ -71,3 +71,4 @@ export default function DisplayQueryResults() {
     </main>
   );
 }
+
